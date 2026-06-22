@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Тесты используют FakeEncoder -> тяжёлые torch/sentence-transformers не нужны.
+      - name: Install lightweight deps
+        run: pip install numpy rank-bm25 "pydantic>=2.6" "pydantic-settings>=2.2" pytest ruff
+      - name: Lint
+        run: ruff check .
+      - name: Tests
+        run: pytest

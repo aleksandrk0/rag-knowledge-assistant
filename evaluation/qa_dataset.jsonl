@@ -1,0 +1,43 @@
+{"question": "Какое стандартное значение константы k в RRF?", "gold_source": "retrieval.md", "type": "lexical", "gold_text": "Стандартное значение константы k в RRF равно 60."}
+{"question": "Как объединить несколько ранжированных списков, если у них несравнимые шкалы оценок?", "gold_source": "retrieval.md", "type": "semantic", "gold_text": "Объединять по позиции (рангу), а не по сырым оценкам."}
+{"question": "Почему один только семантический поиск пропускает точные артикулы и числа?", "gold_source": "retrieval.md", "type": "semantic", "gold_text": "Векторный поиск ищет по смыслу и промахивается на точных терминах и числах."}
+{"question": "Что такое BM25?", "gold_source": "retrieval.md", "type": "lexical", "gold_text": "BM25 — лексический поиск по совпадению слов с весами TF-IDF."}
+{"question": "Какие префиксы обязательно требует модель E5 для запроса и документа?", "gold_source": "embeddings.md", "type": "lexical", "gold_text": "Запрос как query:, документ как passage:."}
+{"question": "Какой размерности вектор выдаёт multilingual-e5-small?", "gold_source": "embeddings.md", "type": "lexical", "gold_text": "Размерность вектора 384."}
+{"question": "Чем кодирование запроса и документа по отдельности отличается от совместной обработки пары?", "gold_source": "embeddings.md", "type": "semantic", "gold_text": "Bi-encoder кодирует тексты раздельно и быстро; cross-encoder обрабатывает пару совместно, точнее но дороже."}
+{"question": "Зачем нормировать векторы по длине перед поиском?", "gold_source": "embeddings.md", "type": "semantic", "gold_text": "После L2-нормировки скалярное произведение равно косинусу, поиск сводится к матричному умножению."}
+{"question": "Какая модель используется как лёгкий реранкер?", "gold_source": "reranking.md", "type": "lexical", "gold_text": "ms-marco-MiniLM, дистиллированный кросс-энкодер."}
+{"question": "Почему пересортировку кандидатов кросс-энкодером запускают только на узком наборе, а не на всей базе?", "gold_source": "reranking.md", "type": "semantic", "gold_text": "Кросс-энкодер дорогой: считает оценку для каждой пары, поэтому только на top_k кандидатах."}
+{"question": "Что улучшает добавление шага пересортировки результатов перед подачей в модель?", "gold_source": "reranking.md", "type": "semantic", "gold_text": "Поднимает precision и faithfulness, убирает мусор из контекста."}
+{"question": "Что происходит с кандидатами top_k после реранка?", "gold_source": "reranking.md", "type": "lexical", "gold_text": "Остаётся top_n кусков, которые уходят в промпт LLM."}
+{"question": "Что такое эффект lost in the middle?", "gold_source": "chunking.md", "type": "lexical", "gold_text": "Модель хуже использует информацию из середины длинного контекста, чем из начала и конца."}
+{"question": "Зачем переносить хвост предыдущего фрагмента в начало следующего?", "gold_source": "chunking.md", "type": "semantic", "gold_text": "Перекрытие лечит потерю контекста на границах кусков."}
+{"question": "Чем рекурсивное деление текста отличается от разрезания на куски равной длины?", "gold_source": "chunking.md", "type": "semantic", "gold_text": "Рекурсивный делит по крупным разделителям, затем по мелким; фиксированный режет равными кусками."}
+{"question": "Размер куска надёжнее мерить в токенах или в символах?", "gold_source": "chunking.md", "type": "lexical", "gold_text": "В токенах, так как лимит контекста модели задан в токенах."}
+{"question": "Что измеряет метрика MRR?", "gold_source": "evaluation.md", "type": "lexical", "gold_text": "MRR усредняет величину, обратную позиции первого верного ответа."}
+{"question": "Что считает библиотека RAGAS?", "gold_source": "evaluation.md", "type": "lexical", "gold_text": "RAGAS считает faithfulness, context precision и context recall."}
+{"question": "Чем оценка опоры ответа на источники отличается от оценки соответствия ответа вопросу?", "gold_source": "evaluation.md", "type": "semantic", "gold_text": "Faithfulness — опора на контекст, answer relevance — соответствие вопросу; они ортогональны."}
+{"question": "Что такое nDCG?", "gold_source": "evaluation.md", "type": "lexical", "gold_text": "nDCG учитывает градации релевантности и затухание по позиции."}
+{"question": "Что такое HNSW?", "gold_source": "vector_stores.md", "type": "lexical", "gold_text": "HNSW — иерархический граф для приближённого поиска ближайших соседей."}
+{"question": "Какое расширение PostgreSQL добавляет поиск по векторной близости?", "gold_source": "vector_stores.md", "type": "lexical", "gold_text": "pgvector добавляет тип vector и индекс по близости."}
+{"question": "Где Qdrant хранит метаданные рядом с эмбеддингом?", "gold_source": "vector_stores.md", "type": "semantic", "gold_text": "В payload — полезной нагрузке точки."}
+{"question": "Какой приближённый метод даёт сублинейный поиск ближайших соседей ценой небольшой потери точности?", "gold_source": "vector_stores.md", "type": "semantic", "gold_text": "ANN на индексе HNSW даёт сублинейный поиск."}
+{"question": "Что такое PagedAttention?", "gold_source": "llm_serving.md", "type": "lexical", "gold_text": "PagedAttention хранит KV-кэш страницами, как виртуальная память, снижая фрагментацию."}
+{"question": "Что хранит механизм, который не пересчитывает внимание для уже сгенерированных токенов?", "gold_source": "llm_serving.md", "type": "semantic", "gold_text": "KV-кэш хранит ключи и значения внимания для прошлых токенов."}
+{"question": "Во сколько раз int4 уменьшает память против fp16?", "gold_source": "llm_serving.md", "type": "lexical", "gold_text": "int4 уменьшает память вчетверо против fp16."}
+{"question": "Как формирование пакета запросов на лету поднимает загрузку видеокарты?", "gold_source": "llm_serving.md", "type": "semantic", "gold_text": "Continuous batching добавляет новые запросы по мере освобождения слотов."}
+{"question": "В каком формате QLoRA квантует базовую модель?", "gold_source": "finetuning.md", "type": "lexical", "gold_text": "QLoRA квантует базовую модель до 4 бит в формате NF4."}
+{"question": "Что добавляет LoRA к замороженным весам модели?", "gold_source": "finetuning.md", "type": "lexical", "gold_text": "LoRA добавляет пару низкоранговых матриц и обучает только их."}
+{"question": "Какие два главных гиперпараметра у метода с низкоранговыми добавками?", "gold_source": "finetuning.md", "type": "semantic", "gold_text": "Ранг разложения и коэффициент масштабирования alpha."}
+{"question": "Что обычно дешевле и надёжнее для добавления свежих фактов — дообучение или поиск по базе?", "gold_source": "finetuning.md", "type": "semantic", "gold_text": "Для свежих фактов чаще дешевле и надёжнее RAG, а не дообучение."}
+{"question": "Что такое chain-of-thought?", "gold_source": "prompting.md", "type": "lexical", "gold_text": "Chain-of-thought просит модель рассуждать пошагово перед ответом."}
+{"question": "Какое значение температуры делает вывод детерминированным и повторяемым?", "gold_source": "prompting.md", "type": "semantic", "gold_text": "Температура около нуля делает вывод детерминированным."}
+{"question": "Что позволяет function calling?", "gold_source": "prompting.md", "type": "lexical", "gold_text": "Модель возвращает структурированный вызов инструмента с аргументами."}
+{"question": "Чем промпт с несколькими примерами отличается от промпта только с инструкцией?", "gold_source": "prompting.md", "type": "semantic", "gold_text": "Few-shot добавляет примеры вход-выход; zero-shot — только инструкция."}
+{"question": "Что такое prompt injection?", "gold_source": "security.md", "type": "lexical", "gold_text": "Атака, где вредоносная инструкция во входных данных подменяет инструкцию системы."}
+{"question": "Что стоит на первом месте в OWASP LLM Top-10?", "gold_source": "security.md", "type": "lexical", "gold_text": "На первом месте prompt injection."}
+{"question": "Чем косвенная атака через проиндексированный документ отличается от прямой через пользователя?", "gold_source": "security.md", "type": "semantic", "gold_text": "Косвенная инъекция приходит из внешнего контента, который читает модель, а не напрямую от пользователя."}
+{"question": "Какая столица Австралии?", "gold_source": "", "type": "oos", "gold_text": ""}
+{"question": "Как приготовить классический борщ?", "gold_source": "", "type": "oos", "gold_text": ""}
+{"question": "Сколько в среднем весит африканский слон?", "gold_source": "", "type": "oos", "gold_text": ""}
+{"question": "Какой сегодня курс доллара к рублю?", "gold_source": "", "type": "oos", "gold_text": ""}

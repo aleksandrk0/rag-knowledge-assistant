@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Секреты / окружение
+.env
+
+# Кэши моделей и индексы
+.cache/
+data/index/
+qdrant_storage/
+
+# IDE / ОС
+.idea/
+.vscode/
+.DS_Store

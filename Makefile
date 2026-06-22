@@ -1,0 +1,19 @@
+.PHONY: install demo api test lint eval
+
+install:
+	pip install -r requirements.txt
+
+demo:
+	python demo.py
+
+api:
+	uvicorn api.main:app --reload
+
+test:
+	pytest
+
+lint:
+	ruff check .
+
+eval:
+	python evaluation/run_eval.py
