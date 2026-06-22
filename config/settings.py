@@ -48,5 +48,9 @@ class Settings(BaseSettings):
     gigachat_scope: str = "GIGACHAT_API_PERS"
     gigachat_verify_ssl: bool = True  # False, если нет цепочки сертификатов Минцифры
 
+    # --- безопасность (LLM Security) ---
+    enable_security_guard: bool = False  # карантин инъекций + контроль выхода
+    security_canary: str = "CANARY-9b3f7e2a-do-not-reveal"
+
 
 settings = Settings()

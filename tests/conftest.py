@@ -20,6 +20,7 @@ from config.settings import Settings  # noqa: E402
 from rag.generation.llm import LLMClient  # noqa: E402
 from rag.pipeline import RAGPipeline  # noqa: E402
 from rag.retrieval.rerank import NoopReranker  # noqa: E402
+from rag.security import SecurityGuard  # noqa: E402
 
 _WORD = re.compile(r"\w+", re.UNICODE)
 
@@ -65,3 +66,9 @@ def pipeline(settings):
 def ingested(pipeline):
     pipeline.ingest(DOCS)
     return pipeline
+
+
+@pytest.fixture
+def guarded_pipeline(settings):
+    return RAGPipeline(settings, encoder=FakeEncoder(), reranker=NoopReranker(),
+                       llm=LLMClient(settings), guard=SecurityGuard())

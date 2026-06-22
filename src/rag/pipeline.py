@@ -24,17 +24,20 @@ class Answer:
     text: str
     sources: list[str]
     contexts: list[str] = field(default_factory=list)  # тексты кусков для оценки faithfulness
+    security_events: list = field(default_factory=list)  # сработавшие детекторы безопасности
     timings_ms: dict[str, float] = field(default_factory=dict)
 
 
 class RAGPipeline:
-    def __init__(self, settings, encoder: EncoderProtocol, reranker=None, llm=None, store=None):
+    def __init__(self, settings, encoder: EncoderProtocol, reranker=None, llm=None,
+                 store=None, guard=None):
         self.settings = settings
         self.encoder = encoder
         self.store = store or MemoryVectorStore()
         self.bm25: BM25Index | None = None
         self.reranker = reranker or NoopReranker()
         self.llm = llm or LLMClient(settings)
+        self.guard = guard  # SecurityGuard | None
 
     def ingest(self, docs: list[tuple[str, str]]) -> int:
         """docs: список (источник, текст). Возвращает число кусков."""
@@ -81,8 +84,17 @@ class RAGPipeline:
             fused = rrf_fuse([vec_hits, bm_hits], self.settings.rrf_k, self.settings.top_k)
         with timed(t, "rerank"):
             top = self.reranker.rerank(question, fused, self.settings.top_n)
+        top_chunks = [s.chunk for s in top]
+        sec_events: list = []
+        if self.guard is not None:  # карантин инъекций ДО модели
+            with timed(t, "security_in"):
+                top_chunks, ctx_ev = self.guard.screen_context(top_chunks)
+                sec_events.extend(ctx_ev)
         with timed(t, "generate"):
-            text = self.llm.generate(question, [s.chunk for s in top])
-        sources = list(dict.fromkeys(s.chunk.source for s in top))
-        return Answer(text=text, sources=sources,
-                      contexts=[s.chunk.text for s in top], timings_ms=t)
+            text = self.llm.generate(question, top_chunks)
+        if self.guard is not None:  # контроль выхода (утечка/эксфильтрация)
+            text, out_ev = self.guard.guard_output(text)
+            sec_events.extend(out_ev)
+        sources = list(dict.fromkeys(c.source for c in top_chunks))
+        return Answer(text=text, sources=sources, contexts=[c.text for c in top_chunks],
+                      security_events=sec_events, timings_ms=t)

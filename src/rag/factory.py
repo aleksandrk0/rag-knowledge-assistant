@@ -6,6 +6,7 @@ from __future__ import annotations
 from .embeddings.encoder import E5Encoder
 from .pipeline import RAGPipeline
 from .retrieval.rerank import CrossEncoderReranker, NoopReranker
+from .security import SecurityGuard
 
 
 def build_pipeline(settings) -> RAGPipeline:
@@ -22,4 +23,9 @@ def build_pipeline(settings) -> RAGPipeline:
         if settings.use_rerank
         else NoopReranker()
     )
-    return RAGPipeline(settings, encoder=encoder, reranker=reranker, store=store)
+    guard = (
+        SecurityGuard(canary=settings.security_canary)
+        if settings.enable_security_guard
+        else None
+    )
+    return RAGPipeline(settings, encoder=encoder, reranker=reranker, store=store, guard=guard)

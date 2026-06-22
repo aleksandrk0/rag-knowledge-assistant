@@ -1,4 +1,4 @@
-.PHONY: install demo api test lint eval
+.PHONY: install demo api test lint eval security
 
 install:
 	pip install -r requirements.txt
@@ -17,3 +17,6 @@ lint:
 
 eval:
 	python evaluation/run_eval.py
+
+security:
+	python evaluation/run_security_eval.py
